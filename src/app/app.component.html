@@ -1,0 +1,27 @@
+<div class="container">
+  <h1>GitHub Profile Viewer</h1>
+
+  <form (ngSubmit)="onSubmit()">
+    <input type="text" [(ngModel)]="username" name="username" placeholder="Enter GitHub username" required />
+    <button type="submit">Search</button>
+  </form>
+
+  <div *ngIf="userData" class="profile-card">
+    <img [src]="userData.avatar_url" alt="Avatar" width="120" />
+    <h2>{{ userData.name }}</h2>
+    <p>{{ userData.bio }}</p>
+    <p><strong>Followers:</strong> {{ userData.followers }}</p>
+    <p><strong>Following:</strong> {{ userData.following }}</p>
+    <a [href]="userData.html_url" target="_blank">View Profile on GitHub</a>
+  </div>
+
+  <div *ngIf="userRepos.length > 0" class="repos-list">
+  <h3>Public Repositories ({{ userRepos.length }})</h3>
+  <ul>
+    <li *ngFor="let repo of userRepos">
+      <a [href]="repo.html_url" target="_blank">{{ repo.name }}</a>
+      <p>{{ repo.description }}</p>
+    </li>
+  </ul>
+</div>
+</div>

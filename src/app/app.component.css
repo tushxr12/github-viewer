@@ -1,0 +1,47 @@
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  width: 300px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.profile-card {
+  margin-top: 30px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.profile-card img {
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.repos-list {
+  text-align: left;
+  margin-top: 30px;
+}
+
+.repos-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.repos-list li {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
