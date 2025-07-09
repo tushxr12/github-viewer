@@ -20,37 +20,77 @@ export class AppComponent {
 
   constructor(private http: HttpClient) { }
 
+  // onSubmit() {
+  //   if (!this.username.trim()) {
+  //     this.errorMessage = "Please enter a Github username to proceed"
+  //     return;
+  //   }
+
+
+  //   console.log('Searching GitHub user:', this.username);
+
+  //   this.loading = true;
+  //   this.userData = null;
+  //   this.userRepos = [];
+  //   this.errorMessage = '';
+
+  //   const profileUrl = `https://api.github.com/users/${this.username}`;
+
+
+  //   this.http.get(profileUrl).subscribe({
+  //     next: (user) => {
+  //       this.userData = user;
+  //       this.loading = false;
+
+  //     },
+  //     error: (err) => {
+  //       this.loading = false;
+  //       this.userData = null;
+  //       this.userRepos = [];
+  //       this.hasLoadedRepos = false;
+  //       if (err.status === 404) {
+  //         this.errorMessage = 'No user exists with this username, try again with some valid username!'
+  //       }
+  //       else if (err.status === 400) {
+  //         this.errorMessage = 'Github user not found'
+  //       }
+  //       else {
+  //         this.errorMessage = 'Something went wrong, Please try again in sometime.'
+  //       }
+  //     }
+  //   });
+
   onSubmit() {
-    if (!this.username.trim())
-      return;
+    const trimmedUsername = this.username.trim();
 
-    console.log('Searching GitHub user:', this.username);
-
-    this.loading = true;
+    // Always reset everything before searching
+    this.errorMessage = '';
     this.userData = null;
     this.userRepos = [];
-    this.errorMessage = '';
+    this.loading = false;
+    this.loadingRepos = false;
+    this.hasLoadedRepos = false;
 
-    const profileUrl = `https://api.github.com/users/${this.username}`;
+    // Exit early if input is empty - after resetting everything
+    if (!trimmedUsername) {
+      this.errorMessage = 'Please enter a GitHub username to proceed.';
+      return;
+    }
 
+    this.loading = true;
 
-    this.http.get(profileUrl).subscribe({
-      next: (user) => {
-        this.userData = user;
+    // Fetch user info
+    this.http.get(`https://api.github.com/users/${trimmedUsername}`).subscribe({
+      next: (data: any) => {
+        this.userData = data;
         this.loading = false;
-
       },
-      error: (err) => {
+      error: () => {
+        this.errorMessage = 'No user exists with this username, try again with some valid username!';
+        this.userData = null;
+        this.userRepos = [];
+        this.hasLoadedRepos = false;
         this.loading = false;
-        if (err.status === 404) {
-          this.errorMessage = 'No user exists with this username, try again with some valid username!'
-        }
-        else if (err.status === 400) {
-          this.errorMessage = 'Github user not found'
-        }
-        else {
-          this.errorMessage = 'Something went wrong, Please try again in sometime.'
-        }
       }
     });
 
