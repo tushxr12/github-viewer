@@ -1,27 +1,54 @@
-<div class="container">
-  <h1>GitHub Profile Viewer</h1>
+<div class="flex flex-col min-h-screen">
 
-  <form (ngSubmit)="onSubmit()">
-    <input type="text" [(ngModel)]="username" name="username" placeholder="Enter GitHub username" required />
-    <button type="submit">Search</button>
-  </form>
+  <header class="bg-gray-900 text-white p-6 text-center text-2xl font-semibold">
+    GitHub Profile Viewer
+  </header>
 
-  <div *ngIf="userData" class="profile-card">
-    <img [src]="userData.avatar_url" alt="Avatar" width="120" />
-    <h2>{{ userData.name }}</h2>
-    <p>{{ userData.bio }}</p>
-    <p><strong>Followers:</strong> {{ userData.followers }}</p>
-    <p><strong>Following:</strong> {{ userData.following }}</p>
-    <a [href]="userData.html_url" target="_blank">View Profile on GitHub</a>
-  </div>
+  <main class="flex-grow max-w-3xl mx-auto p-6 w-full">
 
-  <div *ngIf="userRepos.length > 0" class="repos-list">
-  <h3>Public Repositories ({{ userRepos.length }})</h3>
-  <ul>
-    <li *ngFor="let repo of userRepos">
-      <a [href]="repo.html_url" target="_blank">{{ repo.name }}</a>
-      <p>{{ repo.description }}</p>
-    </li>
-  </ul>
-</div>
+    <form (ngSubmit)="onSubmit()" class="flex flex-col sm:flex-row gap-4 mb-6 items-center justify-center">
+      <input type="text" [(ngModel)]="username" name="username" placeholder="Enter GitHub username" required
+        class="px-4 py-2 border border-gray-300 rounded-md shadow-sm w-full sm:w-auto" />
+      <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md shadow">
+        Search
+      </button>
+    </form>
+
+    <div *ngIf="loading" class="flex justify-center items-center my-8">
+      <div class="w-10 h-10 border-4 border-green-500 border-dashed rounded-full animate-spin"></div>
+    </div>
+
+
+    <div *ngIf="userData" class="bg-white shadow-md rounded-lg p-6 text-center mb-6">
+      <img [src]="userData.avatar_url" alt="Avatar" class="w-24 h-24 mx-auto rounded-full mb-4">
+      <h2 class="text-xl font-bold mb-1">{{ userData.name }}</h2>
+      <p class="text-gray-600 mb-2">{{ userData.bio }}</p>
+      <div class="flex justify-center gap-6 text-sm text-gray-700">
+        <span>👥 {{ userData.followers }} followers</span>
+        <span>👣 {{ userData.following }} following</span>
+      </div>
+      <a [href]="userData.html_url" target="_blank" class="inline-block mt-4 text-blue-600 hover:underline">
+        View Profile on GitHub
+      </a>
+    </div>
+
+    <div *ngIf="userRepos.length > 0" class="bg-white shadow-md rounded-lg p-6">
+      <h3 class="text-lg font-semibold mb-4">Public Repositories ({{ userRepos.length }})</h3>
+      <ul class="space-y-3">
+        <li *ngFor="let repo of userRepos">
+          <a [href]="repo.html_url" target="_blank" class="text-blue-600 font-medium hover:underline">
+            {{ repo.name }}
+          </a>
+          <p class="text-gray-600 text-sm">{{ repo.description }}</p>
+        </li>
+      </ul>
+    </div>
+
+  </main>
+
+  <footer class="bg-gray-900 text-white text-center py-4">
+    Made with ❤️ by <a href="https://www.linkedin.com/in/tushxr12"
+      class="italic hover:underline text-blue-400">Tushar</a> | © 2025
+  </footer>
+
 </div>
