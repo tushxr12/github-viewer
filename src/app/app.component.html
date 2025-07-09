@@ -17,7 +17,7 @@
     <div *ngIf="loading" class="flex justify-center items-center my-8">
       <div class="w-10 h-10 border-4 border-green-500 border-dashed rounded-full animate-spin"></div>
     </div>
-    
+
     <div *ngIf="errorMessage" class="text-red-600 text-center font-medium mb-4">
       {{ errorMessage }}
     </div>
@@ -33,6 +33,21 @@
       <a [href]="userData.html_url" target="_blank" class="inline-block mt-4 text-blue-600 hover:underline">
         View Profile on GitHub
       </a>
+    </div>
+
+    <div class="text-center mb-6" *ngIf="userData && userData?.public_repos > 0 && userRepos.length === 0 && !loadingRepos && !hasLoadedRepos">
+      <button (click)="loadRepos()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md shadow">
+        Load Public Repositories
+      </button>
+    </div>
+
+    <div *ngIf="loadingRepos" class="flex justify-center items-center my-4">
+      <div class="w-8 h-8 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+    </div>
+
+    <div *ngIf="!loadingRepos && userData && userRepos.length === 0 && hasLoadedRepos"
+      class="text-center text-gray-600 mt-4">
+      This user has no public repositories.
     </div>
 
     <div *ngIf="userRepos.length > 0" class="bg-white shadow-md rounded-lg p-6">
