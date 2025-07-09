@@ -14,11 +14,12 @@ export class AppComponent {
   userData: any = null;
   userRepos: any[] = [];
   loading: boolean = false;
+  errorMessage: string = '';
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient) { }
 
   onSubmit() {
-    if(!this.username.trim())
+    if (!this.username.trim())
       return;
 
     console.log('Searching GitHub user:', this.username);
@@ -26,6 +27,7 @@ export class AppComponent {
     this.loading = true;
     this.userData = null;
     this.userRepos = [];
+    this.errorMessage = '';
 
     const profileUrl = `https://api.github.com/users/${this.username}`;
     const reposUrl = `https://api.github.com/users/${this.username}/repos`;
@@ -38,10 +40,24 @@ export class AppComponent {
             this.userRepos = repos as any[];
             this.loading = false;
           },
-          error: () => this.loading = false,
+          error: () => {
+            this.loading = false;
+            this.errorMessage = 'Failed to load repositories';
+          }
         });
       },
-      error: () => this.loading = false,
+      error: (err) => {
+        this.loading = false;
+        if(err.status === 404){
+          this.errorMessage = 'No user exists with this username, try again with some valid username!'
+        }
+        else if (err.status === 400) {
+          this.errorMessage = 'Github user not found'
+        }
+        else {
+          this.errorMessage = 'Something went wrong, Please try again in sometime.'
+        }
+      }
     });
 
     // this.http.get(profileUrl).subscribe({
@@ -53,7 +69,7 @@ export class AppComponent {
     //   error: (err)=>{
     //     console.log("User not found : ", err);
     //     this.userData = null;
-        
+
     //   }
     // })
 
@@ -65,7 +81,7 @@ export class AppComponent {
     //   error: (err)=>{
     //     console.log("Repos not found: ", err);
     //     this.userRepos = [];
-        
+
     //   }
     // })
   }
