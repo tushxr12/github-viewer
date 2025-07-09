@@ -13,38 +13,60 @@ export class AppComponent {
   username: string = '';
   userData: any = null;
   userRepos: any[] = [];
+  loading: boolean = false;
 
   constructor(private http: HttpClient){}
 
   onSubmit() {
+    if(!this.username.trim())
+      return;
+
     console.log('Searching GitHub user:', this.username);
 
+    this.loading = true;
+    this.userData = null;
+    this.userRepos = [];
+
     const profileUrl = `https://api.github.com/users/${this.username}`;
-    const reporsUrl = `https://api.github.com/users/${this.username}/repos`;
+    const reposUrl = `https://api.github.com/users/${this.username}/repos`;
 
     this.http.get(profileUrl).subscribe({
-      next: (data)=>{
-        this.userData = data;
-        console.log("Github user data : ", this.userData);
+      next: (user) => {
+        this.userData = user;
+        this.http.get(reposUrl).subscribe({
+          next: (repos) => {
+            this.userRepos = repos as any[];
+            this.loading = false;
+          },
+          error: () => this.loading = false,
+        });
       },
+      error: () => this.loading = false,
+    });
 
-      error: (err)=>{
-        console.log("User not found : ", err);
-        this.userData = null;
+    // this.http.get(profileUrl).subscribe({
+    //   next: (data)=>{
+    //     this.userData = data;
+    //     console.log("Github user data : ", this.userData);
+    //   },
+
+    //   error: (err)=>{
+    //     console.log("User not found : ", err);
+    //     this.userData = null;
         
-      }
-    })
+    //   }
+    // })
 
-    this.http.get(reporsUrl).subscribe({
-      next: (repos: any) => {
-          this.userRepos = repos;
-      },
+    // this.http.get(reporsUrl).subscribe({
+    //   next: (repos: any) => {
+    //       this.userRepos = repos;
+    //   },
 
-      error: (err)=>{
-        console.log("Repos not found: ", err);
-        this.userRepos = [];
+    //   error: (err)=>{
+    //     console.log("Repos not found: ", err);
+    //     this.userRepos = [];
         
-      }
-    })
+    //   }
+    // })
   }
 }
