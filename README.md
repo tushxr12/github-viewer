@@ -2,7 +2,7 @@
 
 A sleek and responsive Angular application to search and view GitHub user profiles and their public repositories.
 
-Live Demo: [Click here to view the app](github-viewer-proj.vercel.app/)  
+Live Demo: [Click here to view the app](https://github-viewer-proj.vercel.app/)  
 
 ---
 
